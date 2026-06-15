@@ -458,6 +458,8 @@ Monitoring:
 | **Snapshot idle recovery** | ~50 MB (idle footprint) | **400+** | **~$4/sandbox·mo** |
 | Savings Plan + snapshot recovery | — | same | **~$2–3/sandbox·mo** |
 
+> **vCPU / Memory Overcommit further reduces per-sandbox cost:** Firecracker microVMs support CPU oversubscription — idle sandboxes consume nearly zero CPU, and active sandboxes are burst-oriented. Measured idle footprint is only ~50 MB per VM (far below the allocated 1.5 GiB), which means you can provision more sandboxes than raw memory math suggests and fill the machine based on actual working-set, not allocation. Combined with snapshot-based idle recovery, the effective sandbox density — and thus per-sandbox cost — can be significantly lower than the table above. The right overcommit ratio depends on your workload profile and should be validated through load testing.
+
 ### Key Benchmark Numbers
 
 | Metric | Measured | Environment |
