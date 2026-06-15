@@ -40,9 +40,7 @@ A production-grade AI Agent sandbox platform built on AWS, replicating Fly.io's 
 | **Credential isolation** | ✅ LiteLLM IRSA (verified) | ✅ | ✅ | N/A |
 | **Data sovereignty** | ✅ Stays in your AWS account | ❌ 3rd party | ❌ 3rd party | ✅ |
 | **K8s ecosystem** | ✅ Native | ❌ | ❌ | ❌ |
-| **Est. cost (1000 concurrent)** | **~$170-$450/mo** | ~$800+/mo | ~$600+/mo | Per-call |
-
-> Cost based on c6g.metal with Savings Plan (~-50%) + snapshot idle recovery. Actual depends on active ratio.
+| **Min. monthly cost (1 machine)** | **~$1,018/mo** (Savings Plan) | Managed pricing | Managed pricing | Per-call |
 
 ### Architecture
 
@@ -437,6 +435,28 @@ Monitoring:
 ```
 
 ---
+
+### Cost Breakdown (Minimum Setup — 1 × c6g.metal, us-east-1)
+
+| Resource | Unit Price | Monthly (730h) |
+|---|---|---|
+| c6g.metal (64 vCPU / 128 GiB) | $2.304/hr | ~$1,682 |
+| EKS control plane | $0.10/hr | ~$73 |
+| DynamoDB (PAY_PER_REQUEST) | per write | <$1 |
+| S3 snapshots (Plan B, ~2 GB/sandbox) | $0.023/GB | ~$2–10 |
+| **Total (on-demand)** | | **~$1,756/mo** |
+| **Total (1-yr Savings Plan ~42% off)** | | **~$1,018/mo** |
+
+> Prices are us-east-1 on-demand estimates for reference only.
+> Use [AWS Pricing Calculator](https://calculator.aws) for exact figures.
+
+**Per-sandbox amortized cost (single c6g.metal, 128 GiB):**
+
+| Mode | Memory per sandbox | Sandboxes | Amortized cost |
+|---|---|---|---|
+| 24×7 active workload | 1.5 GiB | ~75 | **~$23/sandbox·mo** |
+| **Snapshot idle recovery** | ~50 MB (idle footprint) | **400+** | **~$4/sandbox·mo** |
+| Savings Plan + snapshot recovery | — | same | **~$2–3/sandbox·mo** |
 
 ### Key Benchmark Numbers
 
